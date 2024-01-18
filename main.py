@@ -1,18 +1,30 @@
 # main.py
 
 from api_handler import get_weather
-from display_handler import display_weather
-import time
 
-def main():
-    city = input("Enter city name: ")
+latitude = 52.52
+longitude = 13.41
 
-    while True:
-        weather_data = get_weather(city)
-        display_weather(weather_data)
+weather_data = get_weather(latitude, longitude)
 
-        # Update every 5 minutes
-        time.sleep(300)
+if weather_data:
+    # Process and display the weather data as needed
+    print("Current Weather:")
+    print(f"Time: {weather_data['current']['time']}")
+    print(f"Temperature at 2m: {weather_data['current']['temperature_2m']}°C")
+    print(f"Wind Speed at 10m: {weather_data['current']['wind_speed_10m']} m/s")
 
-if __name__ == "__main__":
-    main()
+    print("\nHourly Weather:")
+    times = weather_data['hourly']['time']
+    temperatures = weather_data['hourly']['temperature_2m']
+    relative_humidity = weather_data['hourly']['relative_humidity_2m']
+    wind_speeds = weather_data['hourly']['wind_speed_10m']
+
+    for i in range(len(times)):
+        print(f"Time: {times[i]}")
+        print(f"Temperature at 2m: {temperatures[i]}°C")
+        print(f"Relative Humidity at 2m: {relative_humidity[i]}%")
+        print(f"Wind Speed at 10m: {wind_speeds[i]} m/s")
+        print("\n---")
+else:
+    print("Unable to fetch weather data.")
